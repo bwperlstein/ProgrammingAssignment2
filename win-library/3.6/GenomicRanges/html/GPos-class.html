@@ -1,0 +1,381 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Memory-efficient representation of genomic positions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for GPos-class {GenomicRanges}"><tr><td>GPos-class {GenomicRanges}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Memory-efficient representation of genomic positions</h2>
+
+<h3>Description</h3>
+
+<p>The GPos class is a container for storing a set of <em>genomic positions</em>
+where most of the positions are typically (but not necessarily) adjacent.
+Because genomic positions can be seen as genomic ranges of width 1, the GPos
+class extends the <a href="GRanges-class.html">GenomicRanges</a> virtual class. Note that even though
+a <a href="GRanges-class.html">GRanges</a> instance can be used for storing genomic positions, using a
+GPos object will be much more memory-efficient, especially when the object
+contains long runs of adjacent positions in <em>ascending order</em>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+GPos(pos_runs)  # constructor function
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>pos_runs</code></td>
+<td>
+
+<p>A <a href="GRanges-class.html">GRanges</a> object (or any other <a href="GRanges-class.html">GenomicRanges</a> derivative)
+where each range is interpreted as a run of adjacent ascending genomic
+positions on the same strand.
+If <code>pos_runs</code> is not a <a href="GRanges-class.html">GenomicRanges</a> derivative,
+<code>GPos()</code> first tries to coerce it to one with
+<code>as(pos_runs, "GenomicRanges", strict=FALSE)</code>.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A GPos object.
+</p>
+
+
+<h3>Accessors</h3>
+
+
+
+<h4>Getters</h4>
+
+<p>GPos objects support the same set of getters as other <a href="GRanges-class.html">GenomicRanges</a>
+derivatives (i.e. <code>seqnames()</code>, <code>ranges()</code>, <code>start()</code>,
+<code>end()</code>, <code>strand()</code>, <code>mcols()</code>, <code>seqinfo()</code>,
+etc...), plus the <code>pos()</code> getter which is equivalent to
+<code>start()</code> or <code>end()</code>. See <code>?<a href="GRanges-class.html">GenomicRanges</a></code> for the
+list of getters supported by <a href="GRanges-class.html">GenomicRanges</a> derivatives.
+</p>
+<p>IMPORTANT NOTES:
+</p>
+
+<ol>
+<li> <p><code>ranges()</code> returns an <a href="../../IRanges/html/IPos.html">IPos</a> object instead
+of the <a href="../../IRanges/html/IRanges.html">IRanges</a> object that one gets with other
+<a href="GRanges-class.html">GenomicRanges</a> derivatives. To get an <a href="../../IRanges/html/IRanges.html">IRanges</a>
+object, you need to call <code>ranges()</code> again on the
+<a href="../../IRanges/html/IPos.html">IPos</a> object i.e. do <code>ranges(ranges(x))</code>)
+on GPos object <code>x</code>.
+</p>
+</li>
+<li><p> Note that a GPos object cannot hold names i.e. <code>names()</code>
+always returns <code>NULL</code> on it.
+</p>
+</li></ol>
+
+
+
+
+<h4>Setters</h4>
+
+<p>Like <a href="GRanges-class.html">GRanges</a> objects, GPos objects support the following
+setters:
+</p>
+
+<ul>
+<li><p> The <code>seqnames()</code> and <code>strand()</code> setters.
+</p>
+</li>
+<li><p> The <code>mcols()</code> and <code>metadata()</code> setters.
+</p>
+</li>
+<li><p> The family of setters that operate on the seqinfo component of
+an object:
+<code><a href="../../GenomeInfoDb/html/seqlevels.html">seqlevels</a>()</code>,
+<code><a href="../../GenomeInfoDb/html/seqlevelsStyle.html">seqlevelsStyle</a>()</code>,
+<code><a href="../../GenomeInfoDb/html/seqlengths.html">seqlengths</a>()</code>,
+<code><a href="../../GenomeInfoDb/html/isCircular.html">isCircular</a>()</code>,
+<code><a href="../../GenomeInfoDb/html/genome.html">genome</a>()</code>,
+and <code><a href="../../GenomeInfoDb/html/seqinfo.html">seqinfo</a>()</code>.
+These setters are defined and documented in the <span class="pkg">GenomeInfoDb</span>
+package.
+</p>
+</li></ul>
+
+<p>However, there is no <code>pos()</code> setter for GPos objects at the moment
+(although one might be added in the future).
+</p>
+
+
+
+<h3>Coercion</h3>
+
+<p>From GenomicRanges to GPos:
+A <a href="GRanges-class.html">GenomicRanges</a> derivative <code>x</code> in which all the ranges have a
+width of 1 can be coerced to a GPos object with <code>as(x, "GPos")</code>.
+The names on <code>x</code> are not propagated (a warning is issued if <code>x</code>
+has names on it).
+</p>
+<p>From GPos to GRanges:
+A GPos object <code>x</code> can be coerced to a <a href="GRanges-class.html">GRanges</a> object
+with <code>as(x, "GRanges")</code>. However be aware that the resulting object
+can use thousands times (or more) memory than <code>x</code>!
+See &quot;MEMORY USAGE&quot; in the Examples section below.
+</p>
+<p>From GPos to ordinary R objects:
+Like with any other <a href="GRanges-class.html">GenomicRanges</a> derivative, <code>as.character()</code>,
+<code>as.factor()</code>, and <code>as.data.frame()</code> work on a GPos object
+<code>x</code>. Note however that <code>as.data.frame(x)</code> returns a data frame
+with a <code>pos</code> column (containing <code>pos(x)</code>) instead of the
+<code>start</code>, <code>end</code>, and <code>width</code> columns that one gets with other
+<a href="GRanges-class.html">GenomicRanges</a> derivatives.
+</p>
+
+
+<h3>Subsetting</h3>
+
+<p>A GPos object can be subsetted exactly like a <a href="GRanges-class.html">GRanges</a> object.
+</p>
+
+
+<h3>Concatenation</h3>
+
+<p>GPos objects can be concatenated together with <code>c()</code> or
+<code>append()</code>.
+</p>
+
+
+<h3>Splitting and Relisting</h3>
+
+<p>Like with any other <a href="GRanges-class.html">GRanges</a> object, <code>split()</code> and <code>relist()</code>
+work on a GPos object.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Like for any <a href="../../S4Vectors/html/Vector.html">Vector</a> derivative, the length of a
+GPos object cannot exceed <code>.Machine$integer.max</code> (i.e. 2^31 on
+most platforms). <code>GPos()</code> will return an error if <code>pos_runs</code>
+contains too many genomic positions.
+</p>
+<p>Internal representation of GPos objects has changed in <span class="pkg">GenomicRanges</span>
+1.29.10 (Bioc 3.6). Update any old object <code>x</code> with:
+<code>x &lt;- updateObject(x, verbose=TRUE)</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Hervé Pagès; based on ideas borrowed from Georg Stricker
+<a href="mailto:georg.stricker@in.tum.de">georg.stricker@in.tum.de</a> and Julien Gagneur
+<a href="mailto:gagneur@in.tum.de">gagneur@in.tum.de</a>
+</p>
+
+
+<h3>See Also</h3>
+
+
+<ul>
+<li><p> The <a href="../../IRanges/html/IPos.html">IPos</a> class in the <span class="pkg">IRanges</span>
+package for a memory-efficient representation of <em>integer
+positions</em> (i.e. integer ranges of width 1).
+</p>
+</li>
+<li> <p><a href="GRanges-class.html">GenomicRanges</a> and <a href="GRanges-class.html">GRanges</a> objects.
+</p>
+</li>
+<li><p> The <code><a href="../../GenomeInfoDb/html/seqinfo.html">seqinfo</a></code> accessor and family in
+the <span class="pkg">GenomeInfoDb</span> package for accessing/modifying the seqinfo
+component of an object.
+</p>
+</li>
+<li> <p><a href="GenomicRanges-comparison.html">GenomicRanges-comparison</a> for comparing and ordering genomic
+positions.
+</p>
+</li>
+<li> <p><a href="findOverlaps-methods.html">findOverlaps-methods</a> for finding overlapping
+genomic ranges and/or positions.
+</p>
+</li>
+<li> <p><a href="nearest-methods.html">nearest-methods</a> for finding the nearest
+genomic range/position neighbor.
+</p>
+</li>
+<li><p> The <code><a href="../../BSgenome/html/snpsBySeqname.html">snpsBySeqname</a></code>,
+<code><a href="../../BSgenome/html/snpsByOverlaps.html">snpsByOverlaps</a></code>, and
+<code><a href="../../BSgenome/html/snpsById.html">snpsById</a></code> methods for
+<a href="../../BSgenome/html/SNPlocs.html">SNPlocs</a> objects defined in the <span class="pkg">BSgenome</span>
+package for extractors that return a GPos object.
+</p>
+</li>
+<li> <p><a href="../../SummarizedExperiment/html/SummarizedExperiment.html">SummarizedExperiment</a> objects in the
+<span class="pkg">SummarizedExperiment</span> package.
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+## ---------------------------------------------------------------------
+## BASIC EXAMPLES
+## ---------------------------------------------------------------------
+
+## Example 1:
+gpos1 &lt;- GPos(c("chr1:44-53", "chr1:5-10", "chr2:2-5"))
+gpos1
+
+length(gpos1)
+seqnames(gpos1)
+pos(gpos1)  # same as 'start(gpos1)' and 'end(gpos1)'
+strand(gpos1)
+as.character(gpos1)
+as.data.frame(gpos1)
+as(gpos1, "GRanges")
+as.data.frame(as(gpos1, "GRanges"))
+gpos1[9:17]
+
+## Example 2:
+pos_runs &lt;- GRanges("chrI", IRanges(c(1, 6, 12, 17), c(5, 10, 16, 20)),
+                    strand=c("+", "-", "-", "+"))
+gpos2 &lt;- GPos(pos_runs)
+gpos2
+
+strand(gpos2)
+
+## Example 3:
+gpos3A &lt;- gpos3B &lt;- GPos(c("chrI:1-1000", "chrI:1005-2000"))
+npos &lt;- length(gpos3A)
+
+mcols(gpos3A)$sample &lt;- Rle("sA")
+sA_counts &lt;- sample(10, npos, replace=TRUE)
+mcols(gpos3A)$counts &lt;- sA_counts
+
+mcols(gpos3B)$sample &lt;- Rle("sB")
+sB_counts &lt;- sample(10, npos, replace=TRUE)
+mcols(gpos3B)$counts &lt;- sB_counts
+
+gpos3 &lt;- c(gpos3A, gpos3B)
+gpos3
+
+## Example 4:
+library(BSgenome.Scerevisiae.UCSC.sacCer2)
+genome &lt;- BSgenome.Scerevisiae.UCSC.sacCer2
+gpos4 &lt;- GPos(seqinfo(genome))
+gpos4  # all the positions along the genome are represented
+mcols(gpos4)$dna &lt;- do.call("c", unname(as.list(genome)))
+gpos4
+
+## Note however that, like for any Vector derivative, the length of a
+## GPos object cannot exceed '.Machine$integer.max' (i.e. 2^31 on most
+## platforms) so the above only works with a "small" genome.
+## For example it doesn't work with the Human genome:
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+## Not run: 
+  GPos(seqinfo(TxDb.Hsapiens.UCSC.hg19.knownGene))  # error!
+
+## End(Not run)
+
+## You can use isSmallGenome() to check upfront whether the genome is
+## "small" or not.
+isSmallGenome(genome)
+isSmallGenome(TxDb.Hsapiens.UCSC.hg19.knownGene)
+
+## ---------------------------------------------------------------------
+## MEMORY USAGE
+## ---------------------------------------------------------------------
+
+## Coercion to GRanges works...
+gr4 &lt;- as(gpos4, "GRanges")
+gr4
+## ... but is generally not a good idea:
+object.size(gpos4)
+object.size(gr4)  # 8 times bigger than the GPos object!
+
+## Shuffling the order of the positions impacts memory usage:
+gpos4r &lt;- rev(gpos4)
+object.size(gpos4r)  # significantly
+gpos4s &lt;- sample(gpos4)
+object.size(gpos4s)  # even worse!
+
+## AN IMPORTANT NOTE: In the worst situations, GPos still performs as
+## good as a GRanges object.
+object.size(as(gpos4r, "GRanges"))  # same size as 'gpos4r'
+object.size(as(gpos4s, "GRanges"))  # same size as 'gpos4s'
+
+## Best case scenario is when the object is strictly sorted (i.e.
+## positions are in strict ascending order).
+## This can be checked with:
+is.unsorted(gpos4, strict=TRUE)  # 'gpos4' is strictly sorted
+
+## ---------------------------------------------------------------------
+## USING MEMORY-EFFICIENT METADATA COLUMNS
+## ---------------------------------------------------------------------
+## In order to keep memory usage as low as possible, it is recommended
+## to use a memory-efficient representation of the metadata columns that
+## we want to set on the object. Rle's are particularly well suited for
+## this, especially if the metadata columns contain long runs of
+## identical values. This is the case for example if we want to use a
+## GPos object to represent the coverage of sequencing reads along a
+## genome.
+
+## Example 5:
+library(pasillaBamSubset)
+library(Rsamtools)  # for the BamFile() constructor function
+bamfile1 &lt;- BamFile(untreated1_chr4())
+bamfile2 &lt;- BamFile(untreated3_chr4())
+gpos5 &lt;- GPos(seqinfo(bamfile1))
+library(GenomicAlignments)  # for "coverage" method for BamFile objects
+cvg1 &lt;- unlist(coverage(bamfile1), use.names=FALSE)
+cvg2 &lt;- unlist(coverage(bamfile2), use.names=FALSE)
+mcols(gpos5) &lt;- DataFrame(cvg1, cvg2)
+gpos5
+
+object.size(gpos5)  # lightweight
+
+## Keep only the positions where coverage is at least 10 in one of the
+## 2 samples:
+gpos5[mcols(gpos5)$cvg1 &gt;= 10 | mcols(gpos5)$cvg2 &gt;= 10]
+
+## ---------------------------------------------------------------------
+## USING A GPos OBJECT IN A SummarizedExperiment OBJECT
+## ---------------------------------------------------------------------
+## Because the GPos class extends the GenomicRanges virtual class, a GPos
+## object can be used as the rowRanges component of a SummarizedExperiment
+## object.
+
+## As a 1st example, we show how the counts for samples sA and sB in
+## 'gpos3' can be stored in a SummarizedExperiment object where the rows
+## correspond to unique genomic positions and the columns to samples:
+library(SummarizedExperiment)
+counts &lt;- cbind(sA=sA_counts, sB=sB_counts)
+mcols(gpos3A) &lt;- NULL
+rse3 &lt;- SummarizedExperiment(list(counts=counts), rowRanges=gpos3A)
+rse3
+rowRanges(rse3)
+head(assay(rse3))
+
+## Finally we show how the coverage data from Example 5 can be easily
+## stored in a lightweight SummarizedExperiment object:
+cvg &lt;- mcols(gpos5)
+mcols(gpos5) &lt;- NULL
+rse5 &lt;- SummarizedExperiment(list(cvg=cvg), rowRanges=gpos5)
+rse5
+rowRanges(rse5)
+assay(rse5)
+
+## Keep only the positions where coverage is at least 10 in one of the
+## 2 samples:
+rse5[assay(rse5)$cvg1 &gt;= 10 | assay(rse5)$cvg2 &gt;= 10]
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GenomicRanges</em> version 1.36.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

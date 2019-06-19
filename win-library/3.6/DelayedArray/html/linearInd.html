@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Converting array indices into linear indices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for linearInd {DelayedArray}"><tr><td>linearInd {DelayedArray}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Converting array indices into linear indices</h2>
+
+<h3>Description</h3>
+
+<p><code>linearInd</code> performs the reverse conversion of
+<code>base::<a href="../../base/html/arrayInd.html">arrayInd</a></code>, that is, it converts so-called
+<em>array indices</em> (i.e. n-uplets) into <em>linear indices</em>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+linearInd(aind, dim)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>aind</code></td>
+<td>
+
+<p>Typically a numeric matrix like one returned by
+<code>base::<a href="../../base/html/arrayInd.html">arrayInd</a></code>, that is, a matrix where
+each row is an n-uplet representing an array index.
+Each array index must describe a position relative to the
+implicit array i.e. to the array whose dimensions are specified
+via the <code>dim</code> argument.
+</p>
+<p>For convenience, <code>aind</code> can also be specified as a vector with
+one element per dimension in the implicit array, in which case it will
+be treated like a 1-row matrix.
+</p>
+<p>Note that no bounds checking is performed, that is, values in the j-th
+column of <code>aind</code> can be &lt; 1 or &gt; <code>dim[j]</code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>dim</code></td>
+<td>
+
+<p>An integer vector containing the dimensions of the underlying array.
+</p>
+<p>Note that <code>dim</code> can also be an integer matrix, in which case it
+must have the same shape as <code>aind</code>, that is, 1 row per row in
+<code>aind</code> and 1 column per dimension.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An integer vector with one element per row in <code>aind</code> if
+<code>aind</code> is a matrix.
+</p>
+<p>A single integer if <code>aind</code> is a vector.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/arrayInd.html">arrayInd</a></code> in the <span class="pkg">base</span> package for the reverse
+conversion.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+dim &lt;- 4:2
+linearInd(c(4, 3, 1), dim)
+linearInd(c(4, 3, 2), dim)
+
+aind &lt;- rbind(c(1, 1, 1),
+              c(2, 1, 1),
+              c(3, 1, 1),
+              c(4, 1, 1),
+              c(1, 2, 1),
+              c(1, 1, 2),
+              c(4, 3, 2))
+
+linearInd(aind, dim)
+
+## With a matrix of dimensions:
+
+dims &lt;- rbind(c(4L, 3L),
+              c(5L, 3L),
+              c(6L, 3L))
+
+aind &lt;- rbind(c(1,  2),
+              c(1,  2),
+              c(1,  2))
+
+linearInd(aind, dims)
+
+## Sanity checks:
+
+dim &lt;- c(33:30, 45L, 30L)
+stopifnot(linearInd(rep(1, 6), dim) == 1)
+stopifnot(linearInd(dim, dim) == prod(dim))
+
+stopifnot(identical(linearInd(arrayInd(1:120, 6:4), 6:4), 1:120))
+stopifnot(identical(linearInd(arrayInd(840:1, 4:7), 4:7), 840:1))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>DelayedArray</em> version 0.10.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

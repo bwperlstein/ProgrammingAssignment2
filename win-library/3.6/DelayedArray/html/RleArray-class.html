@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: RleArray objects</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for RleArray-class {DelayedArray}"><tr><td>RleArray-class {DelayedArray}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>RleArray objects</h2>
+
+<h3>Description</h3>
+
+<p>The RleArray class is a <a href="DelayedArray.html">DelayedArray</a> subclass
+for representing an in-memory Run Length Encoded array-like dataset.
+</p>
+<p>All the operations available for <a href="DelayedArray.html">DelayedArray</a>
+objects work on RleArray objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## Constructor function:
+RleArray(data, dim, dimnames, chunksize=NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+
+<p>An <a href="../../S4Vectors/html/Rle.html">Rle</a> object, or an ordinary list of Rle objects,
+or an <a href="../../IRanges/html/RleList.html">RleList</a> object, or a <a href="../../S4Vectors/html/DataFrame.html">DataFrame</a>
+object where all the columns are Rle objects. More generally speaking,
+<code>data</code> can be any list-like object where all the list elements
+are Rle objects.
+</p>
+</td></tr>
+<tr valign="top"><td><code>dim</code></td>
+<td>
+
+<p>The dimensions of the object to be created, that is, an integer vector
+of length one or more giving the maximal indices in each dimension.
+</p>
+</td></tr>
+<tr valign="top"><td><code>dimnames</code></td>
+<td>
+
+<p>The <em>dimnames</em> of the object to be created. Must be <code>NULL</code> or
+a list of length the number of dimensions. Each list element must be
+either <code>NULL</code> or a character vector along the corresponding dimension.
+</p>
+</td></tr>
+<tr valign="top"><td><code>chunksize</code></td>
+<td>
+
+<p>Experimental. Don't use!
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An RleArray object.
+</p>
+
+
+<h3>See Also</h3>
+
+
+<ul>
+<li> <p><a href="../../S4Vectors/html/Rle.html">Rle</a> and <a href="../../S4Vectors/html/DataFrame.html">DataFrame</a> objects
+in the <span class="pkg">S4Vectors</span> package and <a href="../../IRanges/html/RleList.html">RleList</a> objects
+in the <span class="pkg">IRanges</span> package.
+</p>
+</li>
+<li> <p><a href="DelayedArray-class.html">DelayedArray</a> objects.
+</p>
+</li>
+<li> <p><a href="DelayedArray-utils.html">DelayedArray-utils</a> for common operations on
+<a href="DelayedArray-class.html">DelayedArray</a> objects.
+</p>
+</li>
+<li> <p><code><a href="realize.html">realize</a></code> for realizing a DelayedArray object in memory
+or on disk.
+</p>
+</li>
+<li> <p><a href="../../HDF5Array/html/HDF5Array.html">HDF5Array</a> objects in the <span class="pkg">HDF5Array</span> package.
+</p>
+</li>
+<li><p> The <a href="RleArraySeed-class.html">RleArraySeed</a> helper class.
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+## ---------------------------------------------------------------------
+## A. BASIC EXAMPLE
+## ---------------------------------------------------------------------
+
+data &lt;- Rle(sample(6L, 500000, replace=TRUE), 8)
+a &lt;- array(data, dim=c(50, 20, 4000))  # array() expands the Rle object
+                                       # internally with as.vector()
+
+A &lt;- RleArray(data, dim=c(50, 20, 4000))  # Rle object is NOT expanded
+A
+
+object.size(a)
+object.size(A)
+
+stopifnot(identical(a, as.array(A)))
+
+as(A, "Rle")  # deconstruction
+
+toto &lt;- function(x) (5 * x[ , , 1] ^ 3 + 1L) * log(x[, , 2])
+m1 &lt;- toto(a)
+head(m1)
+
+M1 &lt;- toto(A)  # very fast! (operations are delayed)
+M1
+
+stopifnot(identical(m1, as.array(M1)))
+
+cs &lt;- colSums(m1)
+CS &lt;- colSums(M1)
+stopifnot(identical(cs, CS))
+
+## Coercing a DelayedMatrix object to DataFrame produces a DataFrame
+## object with Rle columns:
+as(M1, "DataFrame")
+
+## ---------------------------------------------------------------------
+## B. MAKING AN RleArray OBJECT FROM A LIST-LIKE OBJECT OF Rle OBJECTS
+## ---------------------------------------------------------------------
+
+## From a DataFrame object:
+DF &lt;- DataFrame(A=Rle(sample(3L, 100, replace=TRUE)),
+                B=Rle(sample(3L, 100, replace=TRUE)),
+                C=Rle(sample(3L, 100, replace=TRUE) - 0.5),
+                row.names=sprintf("ID%03d", 1:100))
+
+M2 &lt;- RleArray(DF)
+M2
+
+A3 &lt;- RleArray(DF, dim=c(25, 6, 2))
+A3
+
+M4 &lt;- RleArray(DF, dim=c(25, 12), dimnames=list(LETTERS[1:25], NULL))
+M4
+
+## From an ordinary list:
+## If all the supplied Rle objects have the same length and if the 'dim'
+## argument is not specified, then the RleArray() constructor returns an
+## RleMatrix object with 1 column per Rle object. If the 'dimnames'
+## argument is not specified, then the names on the list are propagated
+## as the colnames of the returned object.
+data &lt;- as.list(DF)
+M2b &lt;- RleArray(data)
+A3b &lt;- RleArray(data, dim=c(25, 6, 2))
+M4b &lt;- RleArray(data, dim=c(25, 12), dimnames=list(LETTERS[1:25], NULL))
+
+data2 &lt;- list(Rle(sample(3L, 9, replace=TRUE)) * 11L,
+              Rle(sample(3L, 15, replace=TRUE)))
+## Not run: 
+  RleArray(data2)  # error! (cannot infer the dim)
+
+## End(Not run)
+RleArray(data2, dim=c(4, 6))
+
+## From an RleList object:
+data &lt;- RleList(data)
+M2c &lt;- RleArray(data)
+A3c &lt;- RleArray(data, dim=c(25, 6, 2))
+M4c &lt;- RleArray(data, dim=c(25, 12), dimnames=list(LETTERS[1:25], NULL))
+
+data2 &lt;- RleList(data2)
+## Not run: 
+  RleArray(data2)  # error! (cannot infer the dim)
+
+## End(Not run)
+RleArray(data2, dim=4:2)
+
+## Sanity checks:
+data0 &lt;- as.vector(unlist(DF, use.names=FALSE))
+m2 &lt;- matrix(data0, ncol=3, dimnames=dimnames(M2))
+stopifnot(identical(m2, as.matrix(M2)))
+rownames(m2) &lt;- NULL
+stopifnot(identical(m2, as.matrix(M2b)))
+stopifnot(identical(m2, as.matrix(M2c)))
+a3 &lt;- array(data0, dim=c(25, 6, 2))
+stopifnot(identical(a3, as.array(A3)))
+stopifnot(identical(a3, as.array(A3b)))
+stopifnot(identical(a3, as.array(A3c)))
+m4 &lt;- matrix(data0, ncol=12, dimnames=dimnames(M4))
+stopifnot(identical(m4, as.matrix(M4)))
+stopifnot(identical(m4, as.matrix(M4b)))
+stopifnot(identical(m4, as.matrix(M4c)))
+
+## ---------------------------------------------------------------------
+## C. COERCING FROM RleList OR DataFrame TO RleMatrix
+## ---------------------------------------------------------------------
+
+## Coercing an RleList object to RleMatrix only works if all the list
+## elements in the former have the same length.
+x &lt;- RleList(A=Rle(sample(3L, 20, replace=TRUE)),
+             B=Rle(sample(3L, 20, replace=TRUE)))
+M &lt;- as(x, "RleMatrix")
+stopifnot(identical(x, as(M, "RleList")))
+
+x &lt;- DataFrame(A=x[[1]], B=x[[2]], row.names=letters[1:20])
+M &lt;- as(x, "RleMatrix")
+stopifnot(identical(x, as(M, "DataFrame")))
+
+## ---------------------------------------------------------------------
+## D. CONSTRUCTING A LARGE RleArray OBJECT
+## ---------------------------------------------------------------------
+
+## The RleArray() constructor does not accept a long Rle object at the
+## moment:
+## Not run: 
+  RleArray(Rle(5, 3e9), dim=c(3, 1e9))  # error!
+
+## End(Not run)
+
+## The workaround is to supply a list of Rle objects instead:
+data &lt;- lapply(1:500, function(j) Rle(runif(99), 1e6 + 99:1))
+dim &lt;- c(6750, 73337, 100)
+A &lt;- RleArray(data, dim)
+A
+
+## Because all the Rle objects in 'data' have the same length, we can
+## call RleArray() on it without specifying the 'dim' argument. This
+## returns an RleMatrix object where each column corresponds to an Rle
+## object in 'data':
+M &lt;- RleArray(data)
+M
+stopifnot(identical(as(data, "RleList"), as(M, "RleList")))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>DelayedArray</em> version 0.10.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

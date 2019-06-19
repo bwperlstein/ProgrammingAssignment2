@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: GenomicRangesList objects</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for GenomicRangesList-class {GenomicRanges}"><tr><td>GenomicRangesList-class {GenomicRanges}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>GenomicRangesList objects</h2>
+
+<h3>Description</h3>
+
+<p>A <code>GenomicRangesList</code> is a <code><a href="../../S4Vectors/html/List.html">List</a></code>
+of <code><a href="GRanges-class.html">GenomicRanges</a></code>. It is a virtual class;
+<code>SimpleGenomicRangesList</code> is the basic implementation.  The
+subclass <code><a href="GRangesList-class.html">GRangesList</a></code> provides special behavior
+and is particularly efficient for storing a large number of elements.
+</p>
+
+
+<h3>Constructor</h3>
+
+
+<dl>
+<dt></dt><dd>
+<p><code>GenomicRangesList(...)</code>: Constructs a
+<code>SimpleGenomicRangesList</code> with elements
+taken from the arguments in .... If the only argument is a list,
+the elements are taken from that list.
+</p>
+</dd>
+</dl>
+
+
+
+<h3>Author(s)</h3>
+
+<p>Michael Lawrence</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="GRangesList-class.html">GRangesList</a></code>, which differs from
+<code>SimpleGenomicRangesList</code> in that the <code>GRangesList</code> treats
+its elements as single, compound ranges, particularly in overlap
+operations. <code>SimpleGenomicRangesList</code> is just a barebones list
+for now, without that compound semantic.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>GenomicRanges</em> version 1.36.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

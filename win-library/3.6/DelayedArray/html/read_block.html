@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Read/write blocks of array data</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for read_block {DelayedArray}"><tr><td>read_block {DelayedArray}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Read/write blocks of array data</h2>
+
+<h3>Description</h3>
+
+<p>2 utilities for reading/writing blocks from/to an array-like object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+read_block(x, viewport)
+write_block(x, viewport, block)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+
+<p>An array-like object.
+</p>
+</td></tr>
+<tr valign="top"><td><code>viewport</code></td>
+<td>
+
+<p>An <a href="ArrayGrid-class.html">ArrayViewport</a> object.
+</p>
+</td></tr>
+<tr valign="top"><td><code>block</code></td>
+<td>
+
+<p>An ordinary array of the same dimensions as <code>viewport</code>.
+</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+
+<ul>
+<li> <p><a href="ArrayGrid-class.html">ArrayViewport</a> objects.
+</p>
+</li>
+<li> <p><code><a href="blockGrid.html">blockGrid</a></code> to define grids to use in the context
+of block processing of array-like objects.
+</p>
+</li>
+<li> <p><a href="block_processing.html">block_processing</a> for more information about block processing
+of an array-like object.
+</p>
+</li>
+<li> <p><a href="DelayedArray-class.html">DelayedArray</a> objects.
+</p>
+</li>
+<li> <p><a href="../../base/html/array.html">array</a> objects in base R.
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+m0 &lt;- matrix(1:30, ncol=5)
+
+block_dim &lt;- c(4, 3)
+viewport1 &lt;- ArrayViewport(dim(m0), IRanges(c(3, 2), width=block_dim))
+viewport1
+
+block1 &lt;- read_block(m0, viewport1)
+block1
+
+## No-op:
+write_block(m0, viewport1, block1)
+stopifnot(identical(m0, write_block(m0, viewport1, block1)))
+
+write_block(m0, viewport1, block1 + 100L)
+
+viewport2 &lt;- ArrayViewport(dim(m0), IRanges(c(1, 3), width=block_dim))
+write_block(m0, viewport2, block1 + 100L)
+
+## Using a grid:
+grid0 &lt;- RegularArrayGrid(dim(m0), spacings=c(3L, 2L))
+grid0
+length(grid0)  # number of blocks defined by the grid
+read_block(m0, grid0[[3L]])  # read 3rd block
+read_block(m0, grid0[[1L, 3L]])
+
+## Walk on the grid, colum by column:
+m1 &lt;- m0
+for (b in seq_along(grid0)) {
+    viewport &lt;- grid0[[b]]
+    block &lt;- read_block(m1, viewport)
+    block &lt;- b * 1000L + block
+    m1 &lt;- write_block(m1, viewport, block)
+}
+m1
+
+## Walk on the grid, row by row:
+m2 &lt;- m0
+for (i in seq_len(dim(grid0)[[1]])) {
+  for (j in seq_len(dim(grid0)[[2]])) {
+    viewport &lt;- grid0[[i, j]]
+    block &lt;- read_block(m2, viewport)
+    block &lt;- (i * 10L + j) * 1000L + block
+    m2 &lt;- write_block(m2, viewport, block)
+  }
+}
+m2
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>DelayedArray</em> version 0.10.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Converting transcript-based locations into reference-based...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for transcriptLocs2refLocs {GenomicFeatures}"><tr><td>transcriptLocs2refLocs {GenomicFeatures}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Converting transcript-based locations into reference-based locations</h2>
+
+<h3>Description</h3>
+
+<p><code>transcriptLocs2refLocs</code> converts transcript-based
+locations into reference-based (aka chromosome-based or genomic)
+locations.
+</p>
+<p><code>transcriptWidths</code> computes the lengths of the transcripts
+(called the &quot;widths&quot; in this context) based on the boundaries
+of their exons.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+transcriptLocs2refLocs(tlocs,
+        exonStarts=list(), exonEnds=list(), strand=character(0),
+        decreasing.rank.on.minus.strand=FALSE, error.if.out.of.bounds=TRUE)
+
+transcriptWidths(exonStarts=list(), exonEnds=list())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>tlocs</code></td>
+<td>
+
+<p>A list of integer vectors of the same length as <code>exonStarts</code>
+and <code>exonEnds</code>. Each element in <code>tlocs</code> must contain
+transcript-based locations.
+</p>
+</td></tr>
+<tr valign="top"><td><code>exonStarts, exonEnds</code></td>
+<td>
+
+<p>The starts and ends of the exons, respectively.
+</p>
+<p>Each argument can be a list of integer vectors,
+an <a href="../../IRanges/html/IntegerList.html">IntegerList</a> object,
+or a character vector where each element is a
+comma-separated list of integers.
+In addition, the lists represented by <code>exonStarts</code>
+and <code>exonEnds</code> must have the same shape i.e.
+have the same lengths and have elements of the same lengths.
+The length of <code>exonStarts</code> and <code>exonEnds</code>
+is the number of transcripts.
+</p>
+</td></tr>
+<tr valign="top"><td><code>strand</code></td>
+<td>
+
+<p>A character vector of the same length as <code>exonStarts</code> and
+<code>exonEnds</code> specifying the strand (<code>"+"</code> or <code>"-"</code>)
+from which the transcript is coming.
+</p>
+</td></tr>
+<tr valign="top"><td><code>decreasing.rank.on.minus.strand</code></td>
+<td>
+
+<p><code>TRUE</code> or <code>FALSE</code>.
+Describes the order of exons in transcripts located on the minus strand:
+are they ordered by increasing (default) or decreasing rank?
+</p>
+</td></tr>
+<tr valign="top"><td><code>error.if.out.of.bounds</code></td>
+<td>
+
+<p><code>TRUE</code> or <code>FALSE</code>.
+Controls how out of bound <code>tlocs</code> are handled: an error is thrown
+(default) or <code>NA</code> is returned.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>For <code>transcriptLocs2refLocs</code>: A list of integer vectors of the same
+shape as <code>tlocs</code>.
+</p>
+<p>For <code>transcriptWidths</code>: An integer vector with one element per
+transcript.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Hervé Pagès</p>
+
+
+<h3>See Also</h3>
+
+
+<ul>
+<li> <p><code><a href="extractTranscriptSeqs.html">extractTranscriptSeqs</a></code> for extracting transcript
+(or CDS) sequences from chromosomes.
+</p>
+</li>
+<li> <p><code><a href="coverageByTranscript.html">coverageByTranscript</a></code> for computing coverage by
+transcript (or CDS) of a set of ranges.
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+## ---------------------------------------------------------------------
+## GOING FROM TRANSCRIPT-BASED TO REFERENCE-BASED LOCATIONS
+## ---------------------------------------------------------------------
+library(BSgenome.Hsapiens.UCSC.hg19)  # load the genome
+genome &lt;- BSgenome.Hsapiens.UCSC.hg19
+txdb_file &lt;- system.file("extdata", "hg19_knownGene_sample.sqlite",
+                         package="GenomicFeatures")
+txdb &lt;- loadDb(txdb_file)
+transcripts &lt;- exonsBy(txdb, by="tx", use.names=TRUE)
+tx_seqs &lt;- extractTranscriptSeqs(genome, transcripts)
+
+## Get the reference-based locations of the first 4 (5' end)
+## and last 4 (3' end) nucleotides in each transcript:
+tlocs &lt;- lapply(width(tx_seqs), function(w) c(1:4, (w-3):w))
+tx_strand &lt;- sapply(strand(transcripts), runValue)
+## Note that, because of how we made them, 'tlocs', 'start(exbytx)',
+## 'end(exbytx)' and 'tx_strand' have the same length, and, for any
+## valid positional index, elements at this position are corresponding
+## to each other. This is how transcriptLocs2refLocs() expects them
+## to be!
+rlocs &lt;- transcriptLocs2refLocs(tlocs,
+             start(transcripts), end(transcripts),
+             tx_strand, decreasing.rank.on.minus.strand=TRUE)
+
+## ---------------------------------------------------------------------
+## EXTRACTING WORM TRANSCRIPTS ZC101.3 AND F37B1.1
+## ---------------------------------------------------------------------
+## Transcript ZC101.3 (is on + strand):
+##   Exons starts/ends relative to transcript:
+rstarts1 &lt;- c(1, 488, 654, 996, 1365, 1712, 2163, 2453)
+rends1 &lt;- c(137, 578, 889, 1277, 1662, 1870, 2410, 2561)
+##   Exons starts/ends relative to chromosome:
+starts1 &lt;- 14678410 + rstarts1
+ends1 &lt;- 14678410 + rends1
+
+## Transcript F37B1.1 (is on - strand):
+##   Exons starts/ends relative to transcript:
+rstarts2 &lt;- c(1, 325)
+rends2 &lt;- c(139, 815)
+##   Exons starts/ends relative to chromosome:
+starts2 &lt;- 13611188 - rends2
+ends2 &lt;- 13611188 - rstarts2
+
+exon_starts &lt;- list(as.integer(starts1), as.integer(starts2))
+exon_ends &lt;- list(as.integer(ends1), as.integer(ends2))
+transcripts &lt;- IRangesList(start=exon_starts, end=exon_ends)
+
+library(BSgenome.Celegans.UCSC.ce2)
+## Both transcripts are on chrII:
+chrII &lt;- Celegans$chrII
+tx_seqs &lt;- extractTranscriptSeqs(chrII, transcripts, strand=c("+","-"))
+
+## Same as 'width(tx_seqs)':
+transcriptWidths(exonStarts=exon_starts, exonEnds=exon_ends)
+
+transcriptLocs2refLocs(list(c(1:6, 135:140, 1555:1560),
+                            c(1:6, 137:142, 625:630)),
+                       exonStarts=exon_starts,
+                       exonEnds=exon_ends,
+                       strand=c("+","-"))
+
+## A sanity check:
+ref_locs &lt;- transcriptLocs2refLocs(list(1:1560, 1:630),
+                                   exonStarts=exon_starts,
+                                   exonEnds=exon_ends,
+                                   strand=c("+","-"))
+stopifnot(chrII[ref_locs[[1]]] == tx_seqs[[1]])
+stopifnot(complement(chrII)[ref_locs[[2]]] == tx_seqs[[2]])
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GenomicFeatures</em> version 1.36.1 <a href="00Index.html">Index</a>]</div>
+</body></html>
