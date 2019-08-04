@@ -11,7 +11,7 @@
 
 <meta name="author" content="Steffen Durinck, Wolfgang Huber, Mike Smith" />
 
-<meta name="date" content="2019-05-02" />
+<meta name="date" content="2019-06-27" />
 
 <title>The biomaRt users guide</title>
 
@@ -633,9 +633,9 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">The biomaRt users guide</h1>
 <p class="author-name">Steffen Durinck, Wolfgang Huber, Mike Smith</p>
-<h4 class="date">2 May 2019</h4>
+<h4 class="date">27 June 2019</h4>
 <h4 class="package">Package</h4>
-<p>biomaRt 2.40.0</p>
+<p>biomaRt 2.40.1</p>
 
 </div>
 
@@ -951,7 +951,10 @@ getSequence(id = entrez,
             seqType=&quot;coding_gene_flank&quot;,
             upstream=100, 
             mart=ensembl) </code></pre>
-<pre><code>## Error in getBM(c(seqType, type), filters = c(type, &quot;upstream_flank&quot;), : Query ERROR: caught BioMart::Exception::Usage: Filter upstream_flank NOT FOUND</code></pre>
+<pre><code>##                                                                                      coding_gene_flank entrezgene
+## 1 TCCTTCTCTGCAGGCCCAGGTGACCCAGGGTTGGAAGTGTCTCATGCTGGATCCCCACTTTTCCTCTTGCAGCAGCCAGACTGCCTTCCGGGTCACTGCC       7157
+## 2 CACGTTTCCGCCCTTTGCAATAAGGAAATACATAGTTTACTTTCATTTTTGACTCTGAGGCTCTTTCCAACGCTGTAAAAAAGGACAGAGGCTGTTCCCT        837
+## 3 CCTCCGCCTCCGCCTCCGCCTCCGCCTCCCCCAGCTCTCCGCCTCCCTTCCCCCTCCCCGCCCGACAGCGGCCGCTCGGGCCCCGGCTCTCGGTTATAAG        673</code></pre>
 </div>
 <div id="retrieve-all-5-utr-sequences-of-all-genes-that-are-located-on-chromosome-3-between-the-positions-185514033-and-185535839" class="section level2">
 <h2><span class="header-section-number">4.8</span> Retrieve all 5’ UTR sequences of all genes that are located on chromosome 3 between the positions 185,514,033 and 185,535,839</h2>
@@ -962,10 +965,10 @@ getSequence(id = entrez,
                    mart=ensembl)
 utr5</code></pre>
 <pre><code>##                                                                                                                    5utr
-## 1                                                                                                  Sequence unavailable
-## 2                               TGAGCAAAATCCCACAGTGGAAACTCTTAAGCCTCTGCGAAGTAAATCATTCTTGTGAATGTGACACACGATCTCTCCAGTTTCCAT
+## 1                               TGAGCAAAATCCCACAGTGGAAACTCTTAAGCCTCTGCGAAGTAAATCATTCTTGTGAATGTGACACACGATCTCTCCAGTTTCCAT
+## 2 ACCACACCTCTGAGTCGTCTGAGCTCACTGTGAGCAAAATCCCACAGTGGAAACTCTTAAGCCTCTGCGAAGTAAATCATTCTTGTGAATGTGACACACGATCTCTCCAGTTTCCAT
 ## 3                                                                               ATTCTTGTGAATGTGACACACGATCTCTCCAGTTTCCAT
-## 4 ACCACACCTCTGAGTCGTCTGAGCTCACTGTGAGCAAAATCCCACAGTGGAAACTCTTAAGCCTCTGCGAAGTAAATCATTCTTGTGAATGTGACACACGATCTCTCCAGTTTCCAT
+## 4                                                                                                  Sequence unavailable
 ##   entrezgene
 ## 1     200879
 ## 2     200879
@@ -982,24 +985,24 @@ To get an overview of other valid identifier types we refer to the <code>listFil
                       mart=ensembl)
 protein</code></pre>
 <pre><code>##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             peptide
-## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Sequence unavailable
+## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      MAQTPAFDKPKVELHVHLDGSIKPETILYYGRRRGIALPANTAEGLLNVIGMDKPLTLPDFLAKFDYYMPAIARL*
 ## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Sequence unavailable
-## 3 LERGGEAAAAAAAAAAAPGRGSESPVTISRAGNAGELVSPLLLPPTRRRRRRHIQGPGPVLNLPSAAAAPPVARAPEAAGGGSRSEDYSSSPHSAAAAARPLAAEEKQAQSLQPSSSRRSSHYPAAVQSQAAAERGASATAKSRAISILQKKPRHQQLLPSLSSFFFSHRLPDMTAIIKEIVSRNKRRYQEDGFDLDLTYIYPNIIAMGFPAERLEGVYRNNIDDVVRFLDSKHKNHYKIYNLCAERHYDTAKFNCRVAQYPFEDHNPPQLELIKPFCEDLDQWLSEDDNHVAAIHCKAGKGRTGVMICAYLLHRGKFLKAQEALDFYGEVRTRDKKGVTIPSQRRYVYYYSYLLKNHLDYRPVALLFHKMMFETIPMFSGGTCNPQFVVCQLKVKIYSSNSGPTRREDKFMYFEFPQPLPVCGDIKVEFFHKQNKMLKKDKMFHFWVNTFFIPGPEETSEKVENGSLCDQEIDSICSIERADNDKEYLVLTLTKNDLDKANKDKANRYFSPNFKVKLYFTKTVEEPSNPEASSSTSVTPDVSDNEPDHYRYSDTTDSDPENEPFDEDQHTQITKV*
-## 4                                                                                                                                                                                                                                              MAQTPAFDKPKVELHVHLDGSIKPETILYYGRRRGIALPANTAEGLLNVIGMDKPLTLPDFLAKFDYYMPAIAGCREAIKRIAYEFVEMKAKEGVVYVEVRYSPHLLANSKVEPIPWNQAEGDLTPDEVVALVGQGLQEGERDFGVKARSILCCMRHQPNWSPKVVELCKKYQQQTVVAIDLAGDETIPGSSLLPGHVQAYQAVDILKTERLGHGYHTLEDQALYNRLRQENMHFEICPWSSYLTGAWKPDTEHAVIRLKNDQANYSLNTDDPLIFKSTLDTDYQMTKRDMGFTEEEFKRLNINAAKSSFLPEDEKRELLDLLYKAYGMPPSASAGQNL*
+## 3                                                                                                                                                                                                                                                                                                                          MAQTPAFDKPKVELHVHLDGSIKPETILYYGRRRGIALPANTAEGLLNVIGMDKPLTLPDFLAKFDYYMPAIAGCREAIKRIAYEFVEMKAKEGVVYVEVRYSPHLLANSKVEPIPWNQAEGDLTPDEVVALVGQGLQEGERDFGVKARSILCCMRHQPNWSPKVVELCKKYQQQTVVAIDLAGDETIPGSSLLPGHVQAYQEAVKSGIHRTVHAGEVGSAEVVKEAVDILKTERLGHGYHTLEDQALYNRLRQENMHFEAQK*
+## 4                                                                                                                                                                                                                                                                                                                                                                                                                                        ALLFHKMMFETIPMFSGGTCNPQFVVCQLKVKIYSSNSGPTRREDKFMYFEFPQPLPVCGDIKVEFFHKQNKMLKKDKMFHFWVNTFFIPGPEETSEKVENGSLCDQEIDSICSIERADNDKEYLVLTLTKNDLDKANKDKANRYFSPNFKVS*
 ## 5                                                                                                                                                                                                                      MAQTPAFDKPKVELHVHLDGSIKPETILYYGRRRGIALPANTAEGLLNVIGMDKPLTLPDFLAKFDYYMPAIAGCREAIKRIAYEFVEMKAKEGVVYVEVRYSPHLLANSKVEPIPWNQAEGDLTPDEVVALVGQGLQEGERDFGVKARSILCCMRHQPNWSPKVVELCKKYQQQTVVAIDLAGDETIPGSSLLPGHVQAYQEAVKSGIHRTVHAGEVGSAEVVKEAVDILKTERLGHGYHTLEDQALYNRLRQENMHFEICPWSSYLTGAWKPDTEHAVIRLKNDQANYSLNTDDPLIFKSTLDTDYQMTKRDMGFTEEEFKRLNINAAKSSFLPEDEKRELLDLLYKAYGMPPSASAGQNL*
-## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      MAQTPAFDKPKVELHVHLDGSIKPETILYYGRRRGIALPANTAEGLLNVIGMDKPLTLPDFLAKFDYYMPAIARL*
-## 7                                                                                                                                                                                                                                                                                                                          MAQTPAFDKPKVELHVHLDGSIKPETILYYGRRRGIALPANTAEGLLNVIGMDKPLTLPDFLAKFDYYMPAIAGCREAIKRIAYEFVEMKAKEGVVYVEVRYSPHLLANSKVEPIPWNQAEGDLTPDEVVALVGQGLQEGERDFGVKARSILCCMRHQPNWSPKVVELCKKYQQQTVVAIDLAGDETIPGSSLLPGHVQAYQEAVKSGIHRTVHAGEVGSAEVVKEAVDILKTERLGHGYHTLEDQALYNRLRQENMHFEAQK*
-## 8                                                                                                                                                                                                                                                                                                                                                                                                                                        ALLFHKMMFETIPMFSGGTCNPQFVVCQLKVKIYSSNSGPTRREDKFMYFEFPQPLPVCGDIKVEFFHKQNKMLKKDKMFHFWVNTFFIPGPEETSEKVENGSLCDQEIDSICSIERADNDKEYLVLTLTKNDLDKANKDKANRYFSPNFKVS*
-## 9                                                                                                                                                                              MTAIIKEIVSRNKRRYQEDGFDLDLTYIYPNIIAMGFPAERLEGVYRNNIDDVVRFLDSKHKNHYKIYNLCAERHYDTAKFNCRVAQYPFEDHNPPQLELIKPFCEDLDQWLSEDDNHVAAIHCKAGKGRTGVMICAYLLHRGKFLKAQEALDFYGEVRTRDKKGVTIPSQRRYVYYYSYLLKNHLDYRPVALLFHKMMFETIPMFSGGTCNPQFVVCQLKVKIYSSNSGPTRREDKFMYFEFPQPLPVCGDIKVEFFHKQNKMLKKDKMFHFWVNTFFIPGPEETSEKVENGSLCDQEIDSICSIERADNDKEYLVLTLTKNDLDKANKDKANRYFSPNFKVKLYFTKTVEEPSNPEASSSTSVTPDVSDNEPDHYRYSDTTDSDPENEPFDEDQHTQITKV*
+## 6                                                                                                                                                                              MTAIIKEIVSRNKRRYQEDGFDLDLTYIYPNIIAMGFPAERLEGVYRNNIDDVVRFLDSKHKNHYKIYNLCAERHYDTAKFNCRVAQYPFEDHNPPQLELIKPFCEDLDQWLSEDDNHVAAIHCKAGKGRTGVMICAYLLHRGKFLKAQEALDFYGEVRTRDKKGVTIPSQRRYVYYYSYLLKNHLDYRPVALLFHKMMFETIPMFSGGTCNPQFVVCQLKVKIYSSNSGPTRREDKFMYFEFPQPLPVCGDIKVEFFHKQNKMLKKDKMFHFWVNTFFIPGPEETSEKVENGSLCDQEIDSICSIERADNDKEYLVLTLTKNDLDKANKDKANRYFSPNFKVKLYFTKTVEEPSNPEASSSTSVTPDVSDNEPDHYRYSDTTDSDPENEPFDEDQHTQITKV*
+## 7                                                                                                                                                                                                                                              MAQTPAFDKPKVELHVHLDGSIKPETILYYGRRRGIALPANTAEGLLNVIGMDKPLTLPDFLAKFDYYMPAIAGCREAIKRIAYEFVEMKAKEGVVYVEVRYSPHLLANSKVEPIPWNQAEGDLTPDEVVALVGQGLQEGERDFGVKARSILCCMRHQPNWSPKVVELCKKYQQQTVVAIDLAGDETIPGSSLLPGHVQAYQAVDILKTERLGHGYHTLEDQALYNRLRQENMHFEICPWSSYLTGAWKPDTEHAVIRLKNDQANYSLNTDDPLIFKSTLDTDYQMTKRDMGFTEEEFKRLNINAAKSSFLPEDEKRELLDLLYKAYGMPPSASAGQNL*
+## 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Sequence unavailable
+## 9 LERGGEAAAAAAAAAAAPGRGSESPVTISRAGNAGELVSPLLLPPTRRRRRRHIQGPGPVLNLPSAAAAPPVARAPEAAGGGSRSEDYSSSPHSAAAAARPLAAEEKQAQSLQPSSSRRSSHYPAAVQSQAAAERGASATAKSRAISILQKKPRHQQLLPSLSSFFFSHRLPDMTAIIKEIVSRNKRRYQEDGFDLDLTYIYPNIIAMGFPAERLEGVYRNNIDDVVRFLDSKHKNHYKIYNLCAERHYDTAKFNCRVAQYPFEDHNPPQLELIKPFCEDLDQWLSEDDNHVAAIHCKAGKGRTGVMICAYLLHRGKFLKAQEALDFYGEVRTRDKKGVTIPSQRRYVYYYSYLLKNHLDYRPVALLFHKMMFETIPMFSGGTCNPQFVVCQLKVKIYSSNSGPTRREDKFMYFEFPQPLPVCGDIKVEFFHKQNKMLKKDKMFHFWVNTFFIPGPEETSEKVENGSLCDQEIDSICSIERADNDKEYLVLTLTKNDLDKANKDKANRYFSPNFKVKLYFTKTVEEPSNPEASSSTSVTPDVSDNEPDHYRYSDTTDSDPENEPFDEDQHTQITKV*
 ##   entrezgene
 ## 1        100
 ## 2       5728
-## 3       5728
-## 4        100
+## 3        100
+## 4       5728
 ## 5        100
-## 6        100
+## 6       5728
 ## 7        100
-## 8       5728
+## 8        100
 ## 9       5728</code></pre>
 </div>
 <div id="retrieve-known-snps-located-on-the-human-chromosome-8-between-positions-148350-and-148612" class="section level2">
@@ -1343,16 +1346,16 @@ convenient programmatic access of all these resources. An example of a package t
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] biomaRt_2.40.0   BiocStyle_2.12.0
+## [1] biomaRt_2.40.1   BiocStyle_2.12.0
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_1.0.1           highr_0.8            compiler_3.6.0       BiocManager_1.30.4   prettyunits_1.0.2   
-##  [6] bitops_1.0-6         tools_3.6.0          progress_1.2.0       digest_0.6.18        bit_1.1-14          
-## [11] RSQLite_2.1.1        evaluate_0.13        memoise_1.1.0        pkgconfig_2.0.2      rlang_0.3.4         
-## [16] DBI_1.0.0            curl_3.3             yaml_2.2.0           parallel_3.6.0       xfun_0.6            
-## [21] httr_1.4.0           stringr_1.4.0        knitr_1.22           S4Vectors_0.22.0     IRanges_2.18.0      
+##  [6] bitops_1.0-6         tools_3.6.0          progress_1.2.2       digest_0.6.19        bit_1.1-14          
+## [11] RSQLite_2.1.1        evaluate_0.14        memoise_1.1.0        pkgconfig_2.0.2      rlang_0.4.0         
+## [16] DBI_1.0.0            curl_3.3             yaml_2.2.0           parallel_3.6.0       xfun_0.8            
+## [21] httr_1.4.0           stringr_1.4.0        knitr_1.23           S4Vectors_0.22.0     IRanges_2.18.1      
 ## [26] hms_0.4.2            stats4_3.6.0         bit64_0.9-7          Biobase_2.44.0       R6_2.4.0            
-## [31] AnnotationDbi_1.46.0 XML_3.98-1.19        rmarkdown_1.12       bookdown_0.9         blob_1.1.1          
+## [31] AnnotationDbi_1.46.0 XML_3.98-1.20        rmarkdown_1.13       bookdown_0.11        blob_1.1.1          
 ## [36] magrittr_1.5         codetools_0.2-16     htmltools_0.3.6      BiocGenerics_0.30.0  assertthat_0.2.1    
 ## [41] stringi_1.4.3        RCurl_1.95-4.12      crayon_1.3.4</code></pre>
 <pre class="r"><code>warnings()</code></pre>

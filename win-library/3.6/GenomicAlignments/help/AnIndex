@@ -122,6 +122,7 @@ GAlignmentsList-class	GAlignmentsList-class
 GappedReads	GappedReads-class
 GappedReads-class	GappedReads-class
 getDumpedAlignments	findMateAlignment
+getListElement,GAlignments-method	GAlignments-class
 granges,GAlignmentPairs-method	GAlignmentPairs-class
 granges,GAlignments-method	GAlignments-class
 granges,GAlignmentsList-method	GAlignmentsList-class

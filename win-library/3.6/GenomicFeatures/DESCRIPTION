@@ -1,6 +1,6 @@
 Package: GenomicFeatures
 Title: Conveniently import and query gene models
-Version: 1.36.1
+Version: 1.36.3
 Encoding: UTF-8
 Author: M. Carlson, H. Pagès, P. Aboyoun, S. Falcon, M. Morgan,
 	D. Sarkar, M. Lawrence, V. Obenchain
@@ -51,9 +51,9 @@ biocViews: Genetics, Infrastructure, Annotation, Sequencing,
         GenomeAnnotation
 git_url: https://git.bioconductor.org/packages/GenomicFeatures
 git_branch: RELEASE_3_9
-git_last_commit: 9af8cc8
-git_last_commit_date: 2019-05-23
-Date/Publication: 2019-05-24
+git_last_commit: 42b42a0
+git_last_commit_date: 2019-06-23
+Date/Publication: 2019-06-26
 NeedsCompilation: no
-Packaged: 2019-05-25 01:36:18 UTC; biocbuild
-Built: R 3.6.0; ; 2019-05-25 13:03:32 UTC; windows
+Packaged: 2019-06-27 01:38:32 UTC; biocbuild
+Built: R 3.6.0; ; 2019-06-27 13:12:43 UTC; windows

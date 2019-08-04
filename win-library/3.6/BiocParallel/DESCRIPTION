@@ -1,7 +1,7 @@
 Package: BiocParallel
 Type: Package
 Title: Bioconductor facilities for parallel evaluation
-Version: 1.17.18
+Version: 1.18.0
 Authors@R: c(
     person("Bioconductor Package Maintainer",
         email="maintainer@bioconductor.org", role="cre"),
@@ -38,12 +38,12 @@ Collate: AllGenerics.R DeveloperInterface.R prototype.R bploop.R
 LinkingTo: BH
 VignetteBuilder: knitr
 git_url: https://git.bioconductor.org/packages/BiocParallel
-git_branch: master
-git_last_commit: 3bc700d
-git_last_commit_date: 2019-03-23
-Date/Publication: 2019-03-24
+git_branch: RELEASE_3_9
+git_last_commit: 0f8a2c6
+git_last_commit_date: 2019-05-02
+Date/Publication: 2019-05-03
 NeedsCompilation: yes
-Packaged: 2019-03-25 02:06:11 UTC; biocbuild
+Packaged: 2019-05-04 00:14:01 UTC; biocbuild
 Author: Bioconductor Package Maintainer [cre],
   Martin Morgan [aut],
   Valerie Obenchain [aut],
@@ -51,5 +51,5 @@ Author: Bioconductor Package Maintainer [cre],
   Ryan Thompson [aut],
   Nitesh Turaga [aut]
 Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
-Built: R 3.6.0; i386-w64-mingw32; 2019-03-25 11:39:09 UTC; windows
+Built: R 3.6.0; x86_64-w64-mingw32; 2019-07-08 02:18:51 UTC; windows
 Archs: i386, x64

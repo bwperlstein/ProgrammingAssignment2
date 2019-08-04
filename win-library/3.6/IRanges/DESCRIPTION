@@ -7,7 +7,7 @@ Description: Provides efficient low-level and highly reusable S4
 	neighbors. Defines efficient list-like classes for storing,
 	transforming and aggregating large grouped data, i.e., collections
 	of atomic vectors and DataFrames.
-Version: 2.18.0
+Version: 2.18.1
 Encoding: UTF-8
 Author: H. Pagès, P. Aboyoun and M. Lawrence
 Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
@@ -44,10 +44,10 @@ Collate: range-squeezers.R Vector-class-leftovers.R
         extractListFragments.R zzz.R
 git_url: https://git.bioconductor.org/packages/IRanges
 git_branch: RELEASE_3_9
-git_last_commit: b261766
-git_last_commit_date: 2019-05-02
-Date/Publication: 2019-05-02
+git_last_commit: b1cab4e
+git_last_commit_date: 2019-05-30
+Date/Publication: 2019-05-31
 NeedsCompilation: yes
-Packaged: 2019-05-03 01:33:23 UTC; biocbuild
-Built: R 3.6.0; i386-w64-mingw32; 2019-05-03 13:43:36 UTC; windows
+Packaged: 2019-06-01 01:07:24 UTC; biocbuild
+Built: R 3.6.0; i386-w64-mingw32; 2019-06-01 13:05:27 UTC; windows
 Archs: i386, x64

@@ -5,7 +5,7 @@ Description: Provides efficient containers for storing and manipulating
 	to a reference genome). This includes read counting, computing the
 	coverage, junction detection, and working with the nucleotide content
 	of the alignments.
-Version: 1.20.0
+Version: 1.20.1
 Encoding: UTF-8
 Author: Hervé Pagès, Valerie Obenchain, Martin Morgan
 Maintainer: Bioconductor Package Maintainer <maintainer@bioconductor.org>
@@ -38,10 +38,10 @@ Video: https://www.youtube.com/watch?v=2KqBSbkfhRo ,
         https://www.youtube.com/watch?v=3PK_jx44QTs
 git_url: https://git.bioconductor.org/packages/GenomicAlignments
 git_branch: RELEASE_3_9
-git_last_commit: 3b5a259
-git_last_commit_date: 2019-05-02
-Date/Publication: 2019-05-02
+git_last_commit: 9dce402
+git_last_commit_date: 2019-06-17
+Date/Publication: 2019-06-18
 NeedsCompilation: yes
-Packaged: 2019-05-03 02:47:37 UTC; biocbuild
-Built: R 3.6.0; i386-w64-mingw32; 2019-05-03 13:26:47 UTC; windows
+Packaged: 2019-06-19 02:37:37 UTC; biocbuild
+Built: R 3.6.0; i386-w64-mingw32; 2019-06-19 13:21:32 UTC; windows
 Archs: i386, x64
